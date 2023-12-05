@@ -169,39 +169,43 @@
         const tableBody = document.querySelector("#dadosTable tbody");
         tableBody.innerHTML = "";
 
-        let melhorRendimentoEscola = null;
-        let melhorRendimento = -1;
-        let melhorAno = null;
+        if (data.length > 0) {
+          let melhorRendimentoEscola = null;
+          let melhorRendimento = -1;
+          let melhorAno = null;
 
-        data.forEach((item) => {
-          const row = document.createElement("tr");
-          Object.values(item).forEach((value, index) => {
-            const cell = document.createElement("td");
-            cell.textContent = value;
-            row.appendChild(cell);
+          data.forEach((item) => {
+            const row = document.createElement("tr");
+            Object.values(item).forEach((value, index) => {
+              const cell = document.createElement("td");
+              cell.textContent = value;
+              row.appendChild(cell);
 
-            // Verifica se a coluna é a de rendimento e se o rendimento é maior que o atual melhor
-            if (index === 6 && parseFloat(value) > melhorRendimento) {
-              melhorRendimento = parseFloat(value);
-              melhorRendimentoEscola = item.nome_escola;
-              melhorAno = item.ano;
-            }
+              // Verifica se a coluna é a de rendimento e se o rendimento é maior que o atual melhor
+              if (index === 6 && parseFloat(value) > melhorRendimento) {
+                melhorRendimento = parseFloat(value);
+                melhorRendimentoEscola = item.nome_escola;
+                melhorAno = item.ano;
+              }
+            });
+            tableBody.appendChild(row);
           });
-          tableBody.appendChild(row);
-        });
 
-        // Exibe a escola com o melhor rendimento
-        const melhorRendimentoElement = document.getElementById("melhorRendimento");
-        if (melhorRendimentoEscola) {
-          if (mostrarMelhorAno && melhorAno) {
-            melhorRendimentoElement.textContent = `Melhor Rendimento em ${melhorAno}: ${melhorRendimentoEscola}`;
+          // Exibe a escola com o melhor rendimento
+          const melhorRendimentoElement = document.getElementById("melhorRendimento");
+          if (melhorRendimentoEscola) {
+            if (mostrarMelhorAno && melhorAno) {
+              melhorRendimentoElement.textContent = `Melhor Rendimento em ${melhorAno}: ${melhorRendimentoEscola}`;
+            } else {
+              melhorRendimentoElement.textContent = `Melhor Rendimento: ${melhorRendimentoEscola}`;
+            }
           } else {
-            melhorRendimentoElement.textContent = `Melhor Rendimento: ${melhorRendimentoEscola}`;
+            melhorRendimentoElement.textContent = `Nenhuma escola encontrada para o ano ${ano}`;
           }
+          melhorRendimentoElement.style.color = "#ff005d";
         } else {
-          melhorRendimentoElement.textContent = `Nenhuma escola encontrada para o ano ${ano}`;
+          alert(`Nenhuma escola encontrada para o ano ${ano}`);
         }
-        melhorRendimentoElement.style.color = "#ff005d";
       } catch (error) {
         console.error("Erro ao carregar dados:", error);
         alert("Erro ao carregar dados. Tente novamente mais tarde.");
